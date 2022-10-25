@@ -1,278 +1,345 @@
+//Traversal in Tree by different methods
 #include <stdio.h>
+#include<stdlib.h>
+
+
+    struct node{
+        int data;
+        struct node*left;
+        struct node*right;
+    };
+    struct node*Create(int val){
+        struct node*p=(struct node*)malloc(sizeof(struct node));
+        p->data=val;
+        p->left=NULL;
+        p->right=NULL;
+        return(p);
+    };
+    struct node*LC(int val,struct node*root){
+        struct node*p=Create(val);
+        root->left=p;
+        
+    };
+    struct node*RC(int val,struct node*root){
+        struct node*p=Create(val);
+        root->right=p;
+    };
+    void preorder(struct node*root){
+        if (root==NULL)
+        return;
+        printf("Preorder Traversal: \t");
+        printf("%d \n",root->data);
+        preorder(root->left);
+        preorder(root->right);
+        
+    }
+    void inorder(struct node*root){
+        if (root==NULL)
+        return;
+        inorder(root->left);
+        printf("Inorder Traversal: \t");
+        printf("%d \n",root->data);
+        inorder(root->right);
+    }
+     void postorder(struct node*root){
+        if (root==NULL)
+        return;
+        postorder(root->left);
+        postorder(root->right);
+        printf("Postorder Traversal: \t");
+        printf("%d \n",root->data);
+    }
+    
+    int main() {
+    printf("Tree traversals of the enterred elements are as follows: \n");
+    struct node*root=Create(1);
+    LC(2,root);
+    RC(6,root);
+    LC(4,root->left);
+    RC(5,root->right);
+    do{
+    printf("\n");
+    preorder(root);
+    printf("\n");
+    inorder(root);
+    printf("\n");
+    postorder(root);
+    } while(root->val!=4);
+    
+      return 0;
+   }
+   
+   
+   
+   
+   
+   #include <stdio.h>
 #include <stdlib.h>
 
-struct node 
-{
+int main() {
+    // Write C code here
 
-    int data;
+    struct node{
+        int data;
+        struct node*left;
+        struct node*right;
+    };
+    struct node*create(int val){
+        struct node*p=(struct node*)malloc(sizeof(struct node));
+        p->data=val;
+        p->left=NULL;
+        p->right=NULL;
+        return(p);
+    };
+    struct node * left(int val,struct node*root){
+        struct node*p=create(val);
+        root->left=p;
 
-    struct node* left;
+    };
+    struct node * right(int val,struct node*root){
+        struct node*p=create(val);
+        root->right=p;
+    };
 
-    struct node* right;
-};
- 
+    int FindMax(struct node * root)
+    {
+        if(root==NULL)
+          return 0; 
+        int max=root->data;
+        int lmax=FindMax(root->left);
+        int rmax=FindMax(root->right);
 
-struct node* newNode(int data) 
-{
+        if(lmax>max)
+          max=lmax;
+        if(rmax>max)
+          max=rmax;
 
-  struct node* node = (struct node*)
+        return max;
+    }
+    struct node*root=create(1);
+    left(2,root);
+    right(0,root);
+    left(3,root->left);
+    right(4,root->left);
+    printf("Maximum element is %d \n", FindMax(root));
 
-                       malloc(sizeof(struct node));
-
-  node->data = data;
-
-  node->left = NULL;
-
-  node->right = NULL;
-
-   
-
-  return(node);
-}
-
-
-int size(struct node* node) 
-{  
-
-  if (node==NULL) 
-
-    return 0;
-
-  else    
-
-    return(size(node->left) + 1 + size(node->right));  
-}
-
-int main()
-{
-
-  struct node *root = newNode(1);
-
-  root->left        = newNode(2);
-
-  root->right       = newNode(3);
-
-  root->left->left  = newNode(4);
-
-  root->left->right = newNode(5);   
- 
-
-  printf("Size of the tree is %d", size(root));  
-
-  getchar();
   return 0;
 }
 
 
+
+
+
+//C Program to search an element in a Binary Tree
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct node {
-    int item;
-    struct node* left;
-    struct node* right;
-
-} Node;
-
-void AddNode(Node** root, int item)
-{
-    Node* temp = *root;
-    Node* prev = *root;
-
-    if (*root == NULL) {
-        root = (Node)malloc(sizeof(Node));
-
-        (*root)->item = item;
-        (*root)->left = (*root)->right = NULL;
-    }
-    else {
-        while (temp != NULL) {
-            if (item > temp->item) {
-                prev = temp;
-                temp = temp->right;
-            }
-            else {
-                prev = temp;
-                temp = temp->left;
-            }
-        }
-        temp = (Node*)malloc(sizeof(Node));
-        temp->item = item;
-
-        if (item >= prev->item)
-            prev->right = temp;
-        else
-            prev->left = temp;
-    }
-}
-
-void DFS(Node* root)
-{
-    if (root) {
-        if (root->left)
-            DFS(root->left);
-
-        if (root->right)
-            DFS(root->right);
-
-        printf("%d  ", root->item);
-    }
-}
-
-int search(Node* root, int item)
-{
-    while (root != NULL) {
-        if (item > root->item)
-            root = root->right;
-        else if (item < root->item)
-            root = root->left;
-        else
-            return 1;
-    }
-    return 0;
-}
-
-int main()
-{
-
-    struct node* head = NULL;
-
-    AddNode(&head, 10);
-    AddNode(&head, 20);
-    AddNode(&head, 40);
-    AddNode(&head, 30);
-    AddNode(&head, 60);
-
-    printf("Tree Items:\n");
-    DFS(head);
-    printf("\n");
-
-    if (search(head, 70))
-        printf("%d item found in tree.\n", 70);
-    else
-        printf("%d item not found in tree.\n", 70);
-
-    if (search(head, 40))
-        printf("%d item found in tree.\n", 40);
-    else
-        printf("%d item not found in tree.\n", 40);
-
-    return 0;
-}
-
-
-#include<stdio.h>
-#include<stdlib.h>
-struct node {
-   int data;
-   struct node* left;
-   struct node* right;
-};
-struct node* addnode(int data) {
-   struct node* node = (struct node*)
-      malloc(sizeof(struct node));
-   node->data = data;
-   node->left = NULL;
-   node->right = NULL;
-   return(node);
-}
-void nodedel(struct node* node) {
-   if (node == NULL) return;
-   nodedel(node->left);
-   nodedel(node->right);
-   printf("Node deleted, value is %d", node->data);
-   free(node);
-}
 int main() {
-   struct node *root = addnode(9);
-   root->left = addnode(4);
-   root->right = addnode(15);
-   root->left->left = addnode(2);
-   root->left->right = addnode(6);
-   root->right->left = addnode(12);
-   root->right->right = addnode(17);
-   nodedel(root);
-   root = NULL;
-   printf(" Tree deleted ");
-   return 0;
+    // Write C code here
+   
+    struct node{
+        int data;
+        struct node*left;
+        struct node*right;
+    };
+    struct node*create(int val){
+        struct node*p=(struct node*)malloc(sizeof(struct node));
+        p->data=val;
+        p->left=NULL;
+        p->right=NULL;
+        return(p);
+    };
+    struct node * left(int val,struct node * root){
+        struct node*p=create(val);
+        root->left=p;
+        
+    };
+    struct node * right(int val,struct node*root){
+        struct node*p=create(val);
+        root->right=p;
+    };
+    
+    int FindElement(int search, struct node * root)
+    {
+        if(root==NULL)
+        return 0;
+        
+        int temp=root->data;
+        int temp1=FindElement(search, root->left);
+        int temp2=FindElement(search, root->right);
+        
+        if(temp==search || temp1==search || temp2==search)
+          printf("SEARCHED ELEMENT IS FOUND IN TREE!");
+        else
+          return 0;
+    }
+    
+    struct node*root=create(1);
+    left(2,root);
+    right(0,root);
+    left(3,root->left);
+    right(4,root->left);
+    FindElement(1,root);
+    
+    
+  return 0;
 }
 
+
+
+
+
+//C Program to compute the size of a Binary Tree.
 
 #include <stdio.h>
 #include <stdlib.h>
 
-
-struct Node {
-
-    int data;
-
-    struct Node *left, *right;
-};
-
-
-struct Node* newNode(int data)
-{
-
-    struct Node* node
-
-        = (struct Node*)malloc(sizeof(struct Node));
-
-    node->data = data;
-
-    node->left = node->right = NULL;
-
-    return (node);
-}
- 
-
-int findMax(struct Node* root)
-{
-
-
-    if (root == NULL)
- 
-
-    int res = root->data;
-
-    int lres = findMax(root->left);
-
-    int rres = findMax(root->right);
-
-    if (lres>res)
-
-        res=lres;
-
-    if (rres > res)
-
-        res=rres;
-
-    return res;
-}
-
-int main(void)
-{
-
-    struct Node* NewRoot = NULL;
-
-    struct Node* root = newNode(2);
-
-    root->left = newNode(7);
-
-    root->right = newNode(5);
-
-    root->left->right = newNode(6);
-
-    root->left->right->left = newNode(1);
-
-    root->left->right->right = newNode(11);
-
-    root->right->right = newNode(9);
-
-    root->right->right->left = newNode(4);
- 
-
-    printf("Maximum element is %d \n", findMax(root));
- 
-
+int main() {
+    // Write C code here
+   
+    struct node{
+        int data;
+        struct node*left;
+        struct node*right;
+    };
+    struct node*create(int val){
+        struct node*p=(struct node*)malloc(sizeof(struct node));
+        p->data=val;
+        p->left=NULL;
+        p->right=NULL;
+        return(p);
+    };
+    struct node * left(int val,struct node * root){
+        struct node*p=create(val);
+        root->left=p;
+        
+    };
+    struct node * right(int val,struct node*root){
+        struct node*p=create(val);
+        root->right=p;
+    };
+    
+    int FindSize(struct node * root)
+    {
+        int cnt;
+        if(root==NULL)
+         return 0;
+         
+        FindSize(root->left);
+        FindSize(root->right);
+        cnt+=1;
+        
+        return cnt;
+     }
+    
+    struct node*root=create(1);
+    left(2,root);
+    right(0,root);
+    left(3,root->left);
+    right(4,root->left);
+    printf("Size of the Binary Tree is %d\n", FindSize(root));
+    
     return 0;
 }
+
+
+
+
+
+// Online C compiler to run C program online
+// Online C compiler to run C program online
+#include <stdio.h>
+#include<stdlib.h>
+
+int main() {
+    struct node{
+        int data;
+        struct node*left;
+        struct node*right;
+    };
+    struct node*create(int val){
+        struct node*p=(struct node*)malloc(sizeof(struct node));
+        
+        p->left=NULL;
+        p->data=val;
+        p->right=NULL;
+        return(p);
+    };
+    struct node*left(int val,struct node*root){
+        struct node*p=create(val);
+        root->left=p;
+        
+    };
+    struct node*right(int val,struct node*root){
+        struct node*p=create(val);
+        root->right=p;
+    };
+    
+    void inorder(struct node*root){
+        if (root==NULL)
+        return;
+        inorder(root->left);
+        printf("%d->",root->data);
+        inorder(root->right);
+    }
+    
+    struct node * inOrderPredecessor(struct node * root)
+    {
+        root=root->left;
+        while(root->right != NULL)
+        {
+            root = root->left;
+        }
+        return root;
+    }
+    
+    struct node * DeleteNode(struct node * root, int val)
+     {
+         struct node * iPre;
+         
+         if(root==NULL)
+          return root;
+          
+          if(root->left==NULL && root->right==NULL)
+          {
+              free(root);
+              return NULL;
+          }
+          
+         if(val < root->data)
+         root->left = DeleteNode(root->left, val);
+         else if(val > root->data)
+         root->right = DeleteNode(root->right, val);
+         else{
+             
+             iPre = inOrderPredecessor(root);
+             root->data = iPre->data;
+             root->left=DeleteNode(root->left, iPre->data);
+         }
+        return root;
+  }
+     
+    struct node*root=create(5);
+    left(3,root);
+    right(8,root);
+    left(1,root->left);
+    right(4,root->left);
+    left(6,root->right);
+    right(9,root->right);
+    
+    
+    
+    inorder(root);
+    DeleteNode(root,1);
+    printf("\n");
+    inorder(root);
+  
+     return 0;
+}
+   
+   
+   
+   
+   
+   
+   
